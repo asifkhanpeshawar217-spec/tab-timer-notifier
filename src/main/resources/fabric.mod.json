@@ -3,11 +3,15 @@
   "id": "tabtimernotifier",
   "version": "${version}",
   "name": "Tab Timer Notifier",
-  "description": "Monitors Nuke and Clone cooldowns in the server's player-list footer and plays a sound when they are ready.",
-  "authors": ["ChatGPT"],
+  "description": "Client-side Nuke and Clone cooldown alerts with independent custom sounds and volume.",
+  "authors": [
+    "ChatGPT"
+  ],
   "environment": "client",
   "entrypoints": {
-    "client": ["com.example.tabtimernotifier.TabTimerNotifierClient"]
+    "client": [
+      "com.example.tabtimernotifier.TabTimerNotifierClient"
+    ]
   },
   "mixins": [
     "tabtimernotifier.mixins.json"

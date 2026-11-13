@@ -31,3 +31,10 @@ You need Fabric Loader 0.18.1 or newer, Fabric API for 1.21.11, and Java 21.
 - If it does not detect the timers, check that the server's footer text matches the formats above.
 - If it detects the timers but the alert is late, the server may update its footer only occasionally; the mod can only react to information the server sends.
 - Sound volume follows Minecraft's player sound settings.
+
+
+## Sound settings
+
+Press **N** (when no other screen is open) to open the sound settings screen. Choose separate sounds for Nuke and Clone, preview them, adjust their independent volume sliders, or use **Restore Default** for either alert. Sound choices and volumes are saved in `config/tab-timer-notifier.json` and remain saved after restarting Minecraft.
+
+Custom MP3 playback uses a bundled Java Sound MP3 decoder and a separate desktop audio output, so Minecraft's in-game master/music/sound sliders do not control these alerts. The operating system's output device and per-application volume controls can still affect the Minecraft Java process. WAV and AIFF files are also accepted.

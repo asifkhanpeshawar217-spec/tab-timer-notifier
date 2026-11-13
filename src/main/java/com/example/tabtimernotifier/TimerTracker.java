@@ -1,7 +1,6 @@
 package com.example.tabtimernotifier;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.sound.SoundEvents;
 
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -99,7 +98,7 @@ public final class TimerTracker {
 
         private void playNotification(MinecraftClient client) {
             if (client.player != null) {
-                client.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(), 1.0f, pitch);
+                IndependentAudio.play(name);
                 client.player.sendMessage(net.minecraft.text.Text.literal(name + " is ready!"), true);
             }
         }

@@ -1,0 +1,11 @@
+package com.example.tabtimernotifier;
+import javax.sound.sampled.*;
+import java.io.*;
+public final class IndependentAudio {
+ private IndependentAudio(){}
+ public static void play(String type){boolean n=type.equals("Nuke");play(n?NotifierSettings.nukeFile:NotifierSettings.cloneFile,n?NotifierSettings.nukeVolume:NotifierSettings.cloneVolume,n?1.0:1.25);}
+ public static void preview(String path,float volume){play(path,volume,1.0);}
+ private static void play(String path,float volume,double pitch){if(volume<=0)return;Thread t=new Thread(()->{try{if(path==null||path.isBlank()||!new File(path).isFile()){tone(volume,pitch);return;}try(AudioInputStream in=AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(path)))){AudioFormat f=in.getFormat();AudioFormat pcm=new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,f.getSampleRate(),16,f.getChannels(),f.getChannels()*2,f.getSampleRate(),false);try(AudioInputStream decoded=AudioSystem.getAudioInputStream(pcm,in)){stream(decoded,pcm,volume);}}}catch(Exception e){System.err.println("[Tab Timer Notifier] Audio playback failed: "+e.getMessage());tone(volume,pitch);}},"TabTimerNotifier-Audio");t.setDaemon(true);t.start();}
+ private static void stream(AudioInputStream in,AudioFormat f,float volume)throws Exception{try(SourceDataLine line=(SourceDataLine)AudioSystem.getLine(new DataLine.Info(SourceDataLine.class,f))){line.open(f);line.start();byte[] b=new byte[4096];int n;while((n=in.read(b))!=-1){for(int i=0;i+1<n;i+=2){short s=(short)((b[i]&255)|(b[i+1]<<8));int v=Math.max(-32768,Math.min(32767,(int)(s*volume)));b[i]=(byte)v;b[i+1]=(byte)(v>>8);}line.write(b,0,n);}line.drain();}}
+ private static void tone(float volume,double pitch){try{AudioFormat f=new AudioFormat(44100,16,1,true,false);byte[] b=new byte[29400];for(int i=0;i<b.length/2;i++){double env=1.0-(double)i/(b.length/2);short s=(short)(Math.sin(2*Math.PI*660*pitch*i/44100)*12000*volume*env);b[i*2]=(byte)s;b[i*2+1]=(byte)(s>>8);}try(SourceDataLine l=(SourceDataLine)AudioSystem.getLine(new DataLine.Info(SourceDataLine.class,f))){l.open(f);l.start();l.write(b,0,b.length);l.drain();}}catch(Exception e){System.err.println("[Tab Timer Notifier] No audio output: "+e.getMessage());}}
+}
